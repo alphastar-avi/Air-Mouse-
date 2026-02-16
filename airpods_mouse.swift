@@ -21,6 +21,19 @@ if manager.isDeviceMotionAvailable {
         // Get current cursor location
         let loc = NSEvent.mouseLocation
 
+        // Calculate desired delta
+        let targetX = CGFloat(roll * factor)
+        let targetY = CGFloat(-pitch * factor * 0.7) // scale vertical less
+
+        // Smooth motion
+        lastX = lastX * (1 - smoothing) + targetX * smoothing
+        lastY = lastY * (1 - smoothing) + targetY * smoothing
+
+        // Move cursor
+        let newX = loc.x + lastX
+        let newY = loc.y + lastY
+        CGWarpMouseCursorPosition(CGPoint(x: newX, y: newY))
+
 
     }
 
